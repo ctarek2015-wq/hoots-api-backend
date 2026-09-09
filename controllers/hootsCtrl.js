@@ -40,11 +40,6 @@ const show = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const hoot = await Hoot.findById(req.params.id);
-    if (!hoot || !hoot.author.equals(req.user._id)) {
-      return res.status(404).json({ error: "Hoot not found" });
-    }
-
     const updatedHoot = await Hoot.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     }).populate("author", "username");
@@ -56,4 +51,15 @@ const update = async (req, res) => {
   }
 };
 
-module.exports = { create, index, show, update };
+const deleteHoot = async (req, res) => {
+  try {
+    await Hoot.findByIdAndDelete(req.params.id);
+
+    res.status(204).end();
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { create, index, show, update, deleteHoot };
