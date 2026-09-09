@@ -6,8 +6,8 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.set("toJSON", {
-  transform: (doc, useOBJ) => {
-    delete useOBJ.password;
+  transform: (doc, userOBJ) => {
+    delete userOBJ.password;
   },
 });
 
