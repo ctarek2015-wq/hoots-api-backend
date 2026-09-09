@@ -9,6 +9,7 @@ require("./database/database");
 // controllers
 const authRoutes = require("./routers/authRouter");
 const isSignedin = require("./middlewares/isSignedin");
+const hootsRouter = require("./routers/hootsRouter");
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,8 @@ app.use(logger("dev"));
 // Routes go here
 
 app.use("/auth", authRoutes);
+
+app.use("/hoots", isSignedin, hootsRouter);
 
 app.get("/protected", isSignedin, (req, res) => {
   try {
