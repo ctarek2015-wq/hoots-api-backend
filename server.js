@@ -10,6 +10,7 @@ require("./database/database");
 const authRoutes = require("./routers/authRouter");
 const isSignedin = require("./middlewares/isSignedin");
 const hootsRouter = require("./routers/hootsRouter");
+const commentsRouter = require("./routers/commentsRouter");
 
 app.use(cors());
 app.use(express.json());
@@ -19,9 +20,12 @@ app.use(logger("dev"));
 
 app.use("/auth", authRoutes);
 
-app.use("/hoots", isSignedin, hootsRouter);
+app.use(isSignedin);
 
-app.get("/protected", isSignedin, (req, res) => {
+app.use("/hoots", hootsRouter);
+app.use("/hoots/:hootId/comments", commentsRouter);
+
+app.get("/protected", (req, res) => {
   try {
     const user = req.user;
     res.status(200).json({ user });
