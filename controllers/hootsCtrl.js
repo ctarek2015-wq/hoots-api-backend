@@ -16,7 +16,7 @@ const create = async (req, res) => {
 const index = async (req, res) => {
   try {
     const hoots = await Hoot.find()
-      .populate("author", "comments.author")
+      .populate(["author", "comments.author"])
       .sort({ createdAt: "desc" });
     res.status(200).json(hoots);
   } catch (error) {
@@ -27,7 +27,10 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const hoot = await Hoot.findById(req.params.hootId).populate("author");
+    const hoot = await Hoot.findById(req.params.hootId).populate([
+      "author",
+      "comments.author",
+    ]);
     if (!hoot) {
       return res.status(404).json({ error: "Hoot not found" });
     }
