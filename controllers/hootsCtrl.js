@@ -27,7 +27,7 @@ const index = async (req, res) => {
 
 const show = async (req, res) => {
   try {
-    const hoot = await Hoot.findById(req.params.id).populate("author");
+    const hoot = await Hoot.findById(req.params.hootId).populate("author");
     if (!hoot) {
       return res.status(404).json({ error: "Hoot not found" });
     }
@@ -40,9 +40,13 @@ const show = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const updatedHoot = await Hoot.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    }).populate("author", "username");
+    const updatedHoot = await Hoot.findByIdAndUpdate(
+      req.params.hootId,
+      req.body,
+      {
+        new: true,
+      },
+    ).populate("author", "username");
 
     res.status(200).json(updatedHoot);
   } catch (error) {
@@ -53,7 +57,7 @@ const update = async (req, res) => {
 
 const deleteHoot = async (req, res) => {
   try {
-    await Hoot.findByIdAndDelete(req.params.id);
+    await Hoot.findByIdAndDelete(req.params.hootId);
 
     res.status(204).end();
   } catch (error) {

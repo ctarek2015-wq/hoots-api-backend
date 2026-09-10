@@ -22,4 +22,34 @@ const create = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-module.exports = { create };
+
+const update = async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId);
+    const comment = hoot.comments.id(req.params.commentId);
+
+    comment.text = req.body.text;
+    await hoot.save();
+
+    res.status(200).json(comment);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const deleteComment = async (req, res) => {
+  try {
+    const hoot = await Hoot.findById(req.params.hootId);
+
+    hoot.comments.remove(req.params.commentId);
+    await hoot.save();
+
+    res.status(204).end();
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { create, update, deleteComment };
